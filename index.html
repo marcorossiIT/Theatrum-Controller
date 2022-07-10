@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="it">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Teatro Audio Player</title>
+
+    <!-- manifest thingies -->
+    <link rel="manifest" href="teatroaudioplayer.webmanifest">
+
+    <link rel="apple-touch-icon" href="img/logo32x32.jpg">
+    <!-- end manifest thingies -->
+
+    <link rel="shortcut icon" href="img/logo32x32.jpg">
+
+    <!-- <script src="js/howler.js"></script> -->
+    <script src="js/howler.js"></script>
+
+    <!-- all.js loads all styles and icons -->
+    <script src="fontawesome/js/all.js"></script>
+    <link rel="stylesheet" href="index.css">
+
+    <script src="index.js"></script>
+  </head>
+
+  <body>
+
+    <div class="mainTitle">
+      <h1>
+        Teatro Audio Player
+      </h1>
+    </div>
+
+    <div class="grid">
+
+      <div class="controlli-suoni">
+
+        <table id="tbl-rumori">
+          <tr id="titoli">
+            <th class="td-titolo ">
+              NOME
+            </th>
+            <th class="td-centered">
+              <i class="fa-solid fa-play"></i><i class="fa-solid fa-pause"></i>
+            </th>
+
+          </tr>
+          <tr>
+            <td>
+              Campanello
+            </td>
+            <td class="td-centered">
+              <button id="btncampanello" onclick="toggleAudioPlay('campanello')"><i
+                  class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Toilet
+            </td>
+            <td class="td-centered">
+              <button id="btntoilet" onclick="toggleAudioPlay('toilet')"><i class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>
+              <input type="range" name="volumeRumori" id="volumeRumori" min="0" max="100"
+                oninput="onvolumerumoriInput(this.value)">
+            </td>
+            <td>
+              <label style="font-family: monospace;" id="labelVolumeRumori" for="volumeRumori"></label>
+              <button class="fadebutton" id="fadeoutRumori" onclick="toggleFadeoutRumori()">FADE OUT</button>
+              <button class="fadebutton" id="fadeinRumori" onclick="toggleFadeinRumori()">FADE IN</button>
+
+
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      <div class="controlli-canzoni">
+
+        <table id="tbl-canzoni">
+          <tr id="titoli">
+            <th class="td-titolo ">
+              NOME
+            </th>
+            <th class="td-centered">
+              <i class="fa-solid fa-play"></i><i class="fa-solid fa-pause"></i>
+            </th>
+
+          </tr>
+          <tr>
+            <td>
+              01
+            </td>
+            <td class="td-centered">
+              <button id="btnuno" onclick="toggleAudioPlay('uno')"><i class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              02
+            </td>
+            <td class="td-centered">
+              <button id="btndue" onclick="toggleAudioPlay('due')"><i class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              03
+            </td>
+            <td class="td-centered">
+              <button id="btntre" onclick="toggleAudioPlay('tre')"><i class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              04
+            </td>
+            <td class="td-centered">
+              <button id="btnquattro" onclick="toggleAudioPlay('quattro')"><i class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              05
+            </td>
+            <td class="td-centered">
+              <button id="btncinque" onclick="toggleAudioPlay('cinque')"><i class="fa-solid fa-play"></i></button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <input type="range" name="volumeCanzoni" id="volumeCanzoni" min="0" max="100"
+                oninput="onvolumecanzoniInput(this.value)">
+            </td>
+            <td>
+              <label style="font-family: monospace;" id="labelVolumeCanzoni" for="volumeCanzoni"></label>
+              <button class="fadebutton" id="fadeoutCanzoni" onclick="toggleFadeoutCanzoni()">FADE OUT</button>
+              <button class="fadebutton" id="fadeinCanzoni" onclick="toggleFadeinCanzoni()">FADE IN</button>
+
+            </td>
+          </tr>
+        </table>
+
+      </div>
+
+      <div class="controlli-generali">
+        <div class="itemMuteall">
+          <button id="btnMuteall" onclick="muteall()">
+            <i class="fa-solid fa-volume-xmark"></i>
+            MUTE ALL
+          </button>
+
+        </div>
+
+        <div class="itemStopall">
+          <button id="btnStopall" onclick="stopall()">
+            <i class="fa-solid fa-stop"></i>
+            STOP ALL
+          </button>
+
+        </div>
+      </div>
+
+
+    </div>
+
+  </body>
+
+
+
+  <script>
+
+let suoni = {}
+    suoni.campanello = {
+      howl: new Howl({
+        src: ['audios/campanello 1.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.campanello.playing = true;
+          iconaStop('campanello')
+
+        },
+        onstop: function () {
+          suoni.campanello.playing = false;
+          iconaPlay('campanello')
+
+        },
+        onend: function () {
+          suoni.campanello.playing = false;
+          iconaPlay('campanello')
+
+        },
+      }),
+      playing: false
+    }
+    suoni.toilet = {
+      howl: new Howl({
+        src: ['audios/Toilet.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.toilet.playing = true;
+          iconaStop('toilet')
+
+        },
+        onstop: function () {
+          suoni.toilet.playing = false;
+          iconaPlay('toilet')
+
+        },
+        onend: function () {
+          suoni.toilet.playing = false;
+          iconaPlay('toilet')
+
+        },
+      }),
+      playing: false
+    }
+    suoni.uno = {
+      howl: new Howl({
+        src: ['audios/01.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.uno.playing = true;
+          iconaStop('uno')
+
+        },
+        onstop: function () {
+          suoni.uno.playing = false;
+          iconaPlay('uno')
+
+        },
+        onend: function () {
+          suoni.uno.playing = false;
+          iconaPlay('uno')
+
+        },
+      }),
+      playing: false
+    }
+    suoni.due = {
+      howl: new Howl({
+        src: ['audios/02.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.due.playing = true;
+          iconaStop('due')
+
+        },
+        onstop: function () {
+          suoni.due.playing = false;
+          iconaPlay('due')
+
+        },
+        onend: function () {
+          suoni.due.playing = false;
+          iconaPlay('due')
+
+        },
+      }),
+      playing: false
+    }
+    suoni.tre = {
+      howl: new Howl({
+        src: ['audios/03.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.tre.playing = true;
+          iconaStop('tre')
+
+        },
+        onstop: function () {
+          suoni.tre.playing = false;
+          iconaPlay('tre')
+
+        },
+        onend: function () {
+          suoni.tre.playing = false;
+          iconaPlay('tre')
+
+        },
+      }),
+      playing: false
+    }
+    suoni.quattro = {
+      howl: new Howl({
+        src: ['audios/04.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.quattro.playing = true;
+          iconaStop('quattro')
+
+        },
+        onstop: function () {
+          suoni.quattro.playing = false;
+          iconaPlay('quattro')
+
+        },
+        onend: function () {
+          suoni.quattro.playing = false;
+          iconaPlay('quattro')
+
+        },
+      }),
+      playing: false
+    }
+    suoni.cinque = {
+      howl: new Howl({
+        src: ['audios/05.mp3'],
+        html5: true,
+        onplay: function () {
+          suoni.cinque.playing = true;
+          iconaStop('cinque')
+
+        },
+        onstop: function () {
+          suoni.cinque.playing = false;
+          iconaPlay('cinque')
+
+        },
+        onend: function () {
+          suoni.cinque.playing = false;
+          iconaPlay('cinque')
+
+        },
+      }),
+      playing: false
+    }
+
+    let isFadeinRumori = false;
+    let isFadeoutRumori = false;
+    let isFadeinCanzoni = false;
+    let isFadeoutCanzoni = false;
+
+    muteall();
+
+    /* ----------- */
+
+    function muteall() {
+      setRumoriVolume(0);
+      setCanzoniVolume(0);
+
+    }
+
+    function stopall() {
+      isFadeinCanzoni = false
+      isFadeoutCanzoni = false
+      isFadeinRumori = false
+      isFadeoutRumori = false
+
+      for (const key in suoni) {
+        if (Object.hasOwnProperty.call(suoni, key)) {
+          const suono = suoni[key];
+          suono.howl.stop();
+
+        }
+      }
+
+    }
+
+    /* ----------- */
+
+    function toggleAudioPlay(suono) {
+
+
+      if (suoni[suono].playing) {
+        suoni[suono].howl.stop();
+      } else {
+        suoni[suono].howl.play();
+      }
+
+
+    }
+
+
+    function setRumoriVolume(volume) {
+
+      isFadeinRumori = false;
+      isFadeoutRumori = false;
+
+      document.getElementById('labelVolumeRumori').innerText = Math.round(volume * 100);
+      document.getElementById('volumeRumori').value = volume * 100;
+
+
+      suoni.campanello.howl.volume(volume)
+      suoni.toilet.howl.volume(volume)
+
+    }
+
+    function setCanzoniVolume(volume) {
+
+      isFadeinCanzoni = false;
+      isFadeoutCanzoni = false;
+
+
+      document.getElementById('labelVolumeCanzoni').innerText = Math.round(volume * 100);
+      document.getElementById('volumeCanzoni').value = volume * 100;
+
+
+      suoni.uno.howl.volume(volume)
+      suoni.due.howl.volume(volume)
+      suoni.tre.howl.volume(volume)
+      suoni.quattro.howl.volume(volume)
+      suoni.cinque.howl.volume(volume)
+    }
+
+    /* ----------- */
+
+    function toggleFadeinRumori() {
+      isFadeoutRumori = false
+      if (isFadeinRumori) {
+        isFadeinRumori = false;
+      } else {
+        isFadeinRumori = true;
+        fadeinRumori();
+      }
+    }
+
+    function fadeinRumori() {
+      fadeInRumori_step();
+    }
+
+    function fadeInRumori_step() {
+      let volumeRanger = document.getElementById('volumeRumori')
+      let volumelabel = document.getElementById('labelVolumeRumori')
+      let nuovoVolume = (Number(volumeRanger.value) + 1) / 100;
+
+      if (nuovoVolume > 1 || !isFadeinRumori) {
+        isFadeinRumori = false;
+
+        return;
+      }
+      suoni.campanello.howl.volume(nuovoVolume)
+      suoni.toilet.howl.volume(nuovoVolume)
+      volumeRanger.value = nuovoVolume * 100;
+      setLabelInnerText(volumelabel, nuovoVolume * 100)
+
+      setTimeout(fadeInRumori_step, 100);
+
+    }
+
+
+    function toggleFadeoutRumori() {
+      isFadeinRumori = false;
+      if (isFadeoutRumori) {
+        isFadeoutRumori = false;
+      } else {
+        isFadeoutRumori = true;
+        fadeoutRumori();
+      }
+    }
+
+    function fadeoutRumori() {
+      fadeOutRumori_step();
+    }
+
+    function fadeOutRumori_step() {
+      let volumeRanger = document.getElementById('volumeRumori')
+      let volumelabel = document.getElementById('labelVolumeRumori')
+      let nuovoVolume = (Number(volumeRanger.value) - 1) / 100;
+
+      if (nuovoVolume < 0 || !isFadeoutRumori) {
+        isFadeoutRumori = false;
+
+        return;
+      }
+
+      suoni.campanello.howl.volume(nuovoVolume)
+      suoni.toilet.howl.volume(nuovoVolume)
+      volumeRanger.value = nuovoVolume * 100;
+      setLabelInnerText(volumelabel, nuovoVolume * 100)
+
+      setTimeout(fadeOutRumori_step, 100);
+
+    }
+
+
+    /* ----------- */
+
+    function toggleFadeinCanzoni() {
+      isFadeoutCanzoni = false
+      if (isFadeinCanzoni) {
+        isFadeinCanzoni = false;
+      } else {
+        isFadeinCanzoni = true;
+        fadeinCanzoni();
+      }
+    }
+
+    function fadeinCanzoni() {
+      fadeInCanzoni_step();
+    }
+
+    function fadeInCanzoni_step() {
+      let volumeRanger = document.getElementById('volumeCanzoni')
+      let volumelabel = document.getElementById('labelVolumeCanzoni')
+      let nuovoVolume = (Number(volumeRanger.value) + 1) / 100;
+
+      if (nuovoVolume > 1 || !isFadeinCanzoni) {
+        isFadeinCanzoni = false;
+
+        return;
+      }
+      suoni.uno.howl.volume(nuovoVolume)
+      suoni.due.howl.volume(nuovoVolume)
+      suoni.tre.howl.volume(nuovoVolume)
+      suoni.quattro.howl.volume(nuovoVolume)
+      suoni.cinque.howl.volume(nuovoVolume)
+      volumeRanger.value = nuovoVolume * 100;
+      setLabelInnerText(volumelabel, nuovoVolume * 100)
+
+      setTimeout(fadeInCanzoni_step, 100);
+
+    }
+
+
+    function toggleFadeoutCanzoni() {
+      isFadeinCanzoni = false;
+      if (isFadeoutCanzoni) {
+        isFadeoutCanzoni = false;
+      } else {
+        isFadeoutCanzoni = true;
+        fadeoutCanzoni();
+      }
+    }
+
+    function fadeoutCanzoni() {
+      fadeOutCanzoni_step();
+    }
+
+    function fadeOutCanzoni_step() {
+      let volumeRanger = document.getElementById('volumeCanzoni')
+      let volumelabel = document.getElementById('labelVolumeCanzoni')
+      let nuovoVolume = (Number(volumeRanger.value) - 1) / 100;
+
+      /*
+      nuovovolume: y
+      volume.value: x
+      y = easeinOut(x)
+      */
+
+      if (nuovoVolume < 0 || !isFadeoutCanzoni) {
+        isFadeoutCanzoni = false;
+
+        return;
+      }
+
+      suoni.uno.howl.volume(nuovoVolume)
+      suoni.due.howl.volume(nuovoVolume)
+      suoni.tre.howl.volume(nuovoVolume)
+      suoni.quattro.howl.volume(nuovoVolume)
+      suoni.cinque.howl.volume(nuovoVolume)
+      volumeRanger.value = nuovoVolume * 100;
+      setLabelInnerText(volumelabel, nuovoVolume * 100)
+
+
+      setTimeout(fadeOutCanzoni_step, 100);
+
+    }
+
+    /* ----------- */
+
+
+    function onvolumerumoriInput(param) {
+      let valueVolume = param / 100;
+
+      isFadeinRumori = false
+      isFadeoutRumori = false
+
+
+      setRumoriVolume(valueVolume)
+
+
+    }
+
+    function onvolumecanzoniInput(param) {
+      let valueVolume = param / 100;
+
+      isFadeinCanzoni = false
+      isFadeoutCanzoni = false
+
+      setCanzoniVolume(valueVolume)
+
+
+    }
+    function iconaPlay(audio) {
+      document.getElementById('btn' + audio).innerHTML = `<i class="fa-solid fa-play"></i>`
+
+    }
+    function iconaStop(audio) {
+      document.getElementById('btn' + audio).innerHTML = `<i class="fa-solid fa-stop"></i>`
+
+    }
+
+    function setLabelInnerText(label, text) {
+      label.innerText = Math.round(text);
+
+    }
+
+    function easeInOut(x, a = 1) {
+
+      let y = (x ** a) / (x ** a + ((1 - x) ** a));
+
+      return y
+    }
+
+    /* ----- KEY SHORTCUT ------ */
+    let keymanager = new KeypressedManager();
+
+    keymanager.onkeypressed('1', toggleAudioPlayUno)
+    keymanager.onkeypressed('2', toggleAudioPlayDue)
+    keymanager.onkeypressed('3', toggleAudioPlayTre)
+    keymanager.onkeypressed('4', toggleAudioPlayQuattro)
+    keymanager.onkeypressed('5', toggleAudioPlayCinque)
+    keymanager.onkeypressed('c', toggleAudioPlayCampanello)
+    keymanager.onkeypressed('t', toggleAudioPlayToilet)
+
+
+    function toggleAudioPlayUno() {
+      toggleAudioPlay('uno')
+    }
+    function toggleAudioPlayUno() {
+      toggleAudioPlay('uno')
+    }
+    function toggleAudioPlayDue() {
+      toggleAudioPlay('due')
+    }
+    function toggleAudioPlayTre() {
+      toggleAudioPlay('tre')
+    }
+    function toggleAudioPlayQuattro() {
+      toggleAudioPlay('quattro')
+    }
+    function toggleAudioPlayCinque() {
+      toggleAudioPlay('cinque')
+    }
+    function toggleAudioPlayToilet() {
+      toggleAudioPlay('toilet')
+    }
+    function toggleAudioPlayCampanello() {
+      toggleAudioPlay('campanello')
+    }
+
+  </script>
+
+</html>
