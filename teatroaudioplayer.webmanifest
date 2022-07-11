@@ -1,8 +1,8 @@
 {
-    "id":"teatroaudioplayer.marcorossiit",
-    "name": "Teatro Audio Player",
-    "short_name": "TAP",
-    "description": "PWA per teatro",
+    "id":"theatroncontroller.marcorossiit",
+    "name": "Theatron Audio Controller",
+    "short_name": "TAC",
+    "description": "PWA Audio player for theater purposes",
     "icons": [
       {
         "src": "img/logo32x32.jpg",
