@@ -1,6 +1,6 @@
-import { KeypressedManager } from "/KeypressedManager.js";
+import { KeypressedManager } from "./KeypressedManager.js";
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register("/serviceworker.js");
+    navigator.serviceWorker.register("./serviceworker.js");
 } else {
     console.warn('browser non compatibile con i service worker')
 }
