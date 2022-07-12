@@ -2,7 +2,8 @@
     "id":"theatroncontroller.marcorossiit",
     "name": "Theatron Audio Controller",
     "short_name": "TAC",
-    "description": "PWA Audio player for theater purposes",
+    "description": "Theatrum is a PWA Audio player for theater direction purposes",
+    "categories":["business", "utilities", "music"],
     "icons": [
       {
         "src": "img/logo32x32.jpg",
