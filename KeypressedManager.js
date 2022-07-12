@@ -12,7 +12,7 @@ esempio d'uso
 keymanager.onkeypressed('a', functionDoSomething);
 */
 
-class KeypressedManager {
+export class KeypressedManager {
     listeners = {};
     keypressStatus = {};
 
