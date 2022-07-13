@@ -1,6 +1,6 @@
 {
-    "id":"theatroncontroller.marcorossiit",
-    "name": "Theatron Audio Controller",
+    "id":"theatrumcontroller.marcorossiit",
+    "name": "Theatrum Audio Controller",
     "short_name": "TAC",
     "description": "Theatrum is a PWA Audio player for theater direction purposes",
     "categories":["business", "utilities", "music"],
@@ -21,6 +21,6 @@
     "background_color": "#B12A34",
     "orientation":"portrait",
     "lang":"it",
-    "scope": "/"
-  }
+    "scope": "https://marcorossiit.github.io/Theatrum-Controller"
+    }
   
