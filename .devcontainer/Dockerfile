@@ -8,4 +8,8 @@ FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-${VARIANT}
 # RUN apk update \
 #     && apk add --no-cache <your-package-list-here>
 RUN apk update \
-&& apk add --no-cache python3
+&& apk add --no-cache python3 yarn
+RUN yarn global add jest jest-environment-jsdom http-server
+RUN yarn 
+
+EXPOSE 8080
